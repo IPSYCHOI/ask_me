@@ -1,6 +1,6 @@
 import Question from "../models/question.schema.js";
 
-async function addQuestion (req,res){
+async function addQuestion (req,res,next){
     const body = req.body.body 
     try {
         const question = new Question({
@@ -12,7 +12,7 @@ async function addQuestion (req,res){
             data:question
         })
     } catch (error) {
-        console.log(error)
+        next (error)
     }
 }
 
