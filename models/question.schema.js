@@ -11,7 +11,11 @@ const questionSchema=new Schema({
         type:String,
         enum:["arabic","english","math"],
         required:true
-    }
+    },
+    answers:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Answer"
+    }]
 })
 
 const Question = mongoose.model("questions",questionSchema)
