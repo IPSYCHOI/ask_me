@@ -1,5 +1,6 @@
 export function err(err,req,res,next){
-    res.status(err.status).json({
+    const code = err.status || 500
+    res.status(code).json({
         message:err.message
     })
 }
