@@ -3,8 +3,3 @@ export function asyncErr(fn){
         fn(req,res).catch(next)
     }
 }
-/**
- * fn => our controller
- * 
- * 
- */
