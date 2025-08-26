@@ -6,9 +6,6 @@ async function addQuestion (req,res){
         body
     })
     await question.save()
-    const e = new Error("snk")
-    e.status=333
-    throw e
     res.status(201).json({
         message:"New question added successfully",
         data:question
@@ -19,12 +16,3 @@ const questionController={
     addQuestion
 }
 export default questionController
-
-/*
-
-{
-    addQuestion
-    getAll
-    getOne
-}
-* */
