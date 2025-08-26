@@ -35,15 +35,12 @@ const getAll = async(req,res)=>{
 }
 const getOne = async(req,res)=>{
     const id = req.params.id
-    const question= await Question.findById(id)
+    const question= await Question.findById(id).populate("answers")
     res.status(200).json({
         message : "question fetched successfully ",
         data:question
     })
 }
-
-
-
 const questionController={
     addQuestion,
     getAll,

@@ -9,5 +9,5 @@ const answerSchema=new Schema({
     }
 })
 
-const Answer = mongoose.model("answers",questionSchema)
+const Answer = mongoose.model("Answer",answerSchema)
 export default Answer
