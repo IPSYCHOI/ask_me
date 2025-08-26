@@ -12,7 +12,27 @@ async function addQuestion (req,res){
     })
 }
 
+const getAll = async(req,res)=>{
+    const questions= await Question.find()
+    res.status(200).json({
+        message : "All questions fetched successfully ",
+        data:questions
+    })
+}
+const getOne = async(req,res)=>{
+    const id = req.params.id
+    const question= await Question.findById(id)
+    res.status(200).json({
+        message : "question fetched successfully ",
+        data:question
+    })
+}
+
+
+
 const questionController={
-    addQuestion
+    addQuestion,
+    getAll,
+    getOne
 }
 export default questionController
