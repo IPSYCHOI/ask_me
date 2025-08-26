@@ -2,8 +2,10 @@ import Question from "../models/question.schema.js";
 
 async function addQuestion (req,res){
     const body = req.body.body 
+    const category = req.body.category
     const question = new Question({
-        body
+        body,
+        category
     })
     await question.save()
     res.status(201).json({
@@ -13,10 +15,22 @@ async function addQuestion (req,res){
 }
 
 const getAll = async(req,res)=>{
-    const questions= await Question.find()
+    const page = req.query.page || 1
+    const limit = req.query.limit || 10
+    const skip = (page-1)*limit
+    const filter= req.query.filter
+    const query= filter?{category:filter}:{}
+    const questions= await Question.find(query)
+    .skip(skip)
+    .limit(limit)
+
+    const total = await Question.countDocuments(query)
     res.status(200).json({
         message : "All questions fetched successfully ",
-        data:questions
+        page,
+        limit,
+        data:questions,
+        total
     })
 }
 const getOne = async(req,res)=>{

@@ -6,6 +6,11 @@ const questionSchema=new Schema({
     body:{
         type:String,
         required:true
+    },
+    category:{
+        type:String,
+        enum:["arabic","english","math"],
+        required:true
     }
 })
 
