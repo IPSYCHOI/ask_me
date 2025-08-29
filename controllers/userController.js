@@ -4,58 +4,57 @@ import jwt from "jsonwebtoken"
 
 
 const signup =  async(req,res)=>{
-    const {name , email, password}= req.body
-    const existUser = await User.findOne({email})
-    if(existUser){
+    const { name, email, password } = req.body;
+    const existUser = await User.findOne({ email });
+    if (existUser) {
         return res.status(400).json({
-            message:"this email already exist"
-        })
+            message: "This email already exists"
+        });
     }
 
-    const hashedPass= await bcrypt.hash(password,10)
+    const hashedPass = await bcrypt.hash(password, 10);
     const user = new User({
         name,
         email,
-        password:hashedPass
-    })
-    await user.save()
-    const parserUser=user.toObject()
-        res.status(201).json({
-        message:"u r logged in",
-        date:{
-            id:parserUser._id,
-            name:parserUser.name,
-            email:parserUser.email
+        password: hashedPass
+    });
+    await user.save();
+    const parserUser = user.toObject();
+    delete parserUser.password;
+    res.status(201).json({
+        message: "User registered successfully",
+        data: {
+            id: parserUser._id,
+            name: parserUser.name,
+            email: parserUser.email
         }
-    })
+    });
 }
 const login = async(req,res)=>{
-    const SECRET="process.env.JWT_SECRET"
-
-    const {email, password}= req.body
-    const user = await User.findOne({email})
-    if(!user){
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
         return res.status(400).json({
-            message:"invalid data"
-        })
+            message: "Invalid email or password"
+        });
     }
-    
-    const isMatch=await bcrypt.compare(password,user.password)
-    if(!isMatch){
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
         return res.status(400).json({
-            message:"invalid data"
-        })
+            message: "Invalid email or password"
+        });
     }
-    const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"1h"})
+    const { generateToken } = await import("../utils/jwt.js");
+    const token = generateToken({ id: user._id }, "1h");
     res.status(200).json({
-        message:"logged in",
-        data:{
-            id:user._id,
-            name:user.name,
-            email:user.email
+        message: "Logged in successfully",
+        data: {
+            id: user._id,
+            name: user.name,
+            email: user.email
         },
         token
-    })
+    });
 
 }
 const userController={
