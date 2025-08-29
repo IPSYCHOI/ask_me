@@ -12,7 +12,7 @@ const router = express.Router()
 
 router.post("/",isAuth,validate(questionSchema),asyncErr(questionController.addQuestion))
 router.get("/",isAuth,asyncErr(questionController.getAll))
-router.get("/:id",isId,asyncErr(questionController.getOne))
+router.get("/:id",isAuth,isId,asyncErr(questionController.getOne))
 
 export { router as questionRouter}
 
