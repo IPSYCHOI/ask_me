@@ -1,23 +1,32 @@
-import jwt  from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import User from "../models/user.schema.js"
-// const SECRET="process.env.JWT_SECRET"
 
-export const isAuth= async(req,res,next)=>{
-    let token = req.headers["authorization"]
-    token = token.split(" ")[1]
-    const result =jwt.verify(token,process.env.JWT_SECRET)
-    if(!result){
-        return res.status(401).json({
-            message:"u r not authenticated"
-        })
-    }   
-    const id = result.id
-    const isExit = await User.findById(id)
-    if(!isExit){
-        return res.status(404).json({
-            message :"user not found"
-        })
+export const isAuth = async (req, res, next) => {
+  try {
+    let authHeader = req.headers["authorization"]
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No token provided" })
     }
-    req.userId=id
+
+    const token = authHeader.split(" ")[1]
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    if (!decoded?.id) {
+      return res.status(401).json({ message: "Invalid token" })
+    }
+
+    const user = await User.findById(decoded.id)
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    req.userId = user._id
     next()
+
+  } catch (error) {
+    return res.status(401).json({ message: "Unauthorized", error: error.message })
+  }
 }
