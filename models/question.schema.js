@@ -15,7 +15,11 @@ const questionSchema=new Schema({
     answers:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Answer"
-    }]
+    }],
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }
 })
 
 const Question = mongoose.model("questions",questionSchema)

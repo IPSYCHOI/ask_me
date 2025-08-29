@@ -3,9 +3,11 @@ import Question from "../models/question.schema.js";
 async function addQuestion (req,res){
     const body = req.body.body 
     const category = req.body.category
+    const id = req.userId
     const question = new Question({
         body,
-        category
+        category,
+        user:id
     })
     await question.save()
     res.status(201).json({
@@ -35,7 +37,7 @@ const getAll = async(req,res)=>{
 }
 const getOne = async(req,res)=>{
     const id = req.params.id
-    const question= await Question.findById(id).populate("answers")
+    const question= await Question.findById(id).populate(["answers","user"])
     res.status(200).json({
         message : "question fetched successfully ",
         data:question

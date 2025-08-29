@@ -14,3 +14,21 @@ export  const validate = (schema)=>{
         next()
     }
 }
+/**
+ * body   {
+ *  "name":"ahmed"
+ * }
+ * 
+ * 
+ * 
+ * params
+ * 
+ * localhost/api/login/ahmed
+ * 
+ * 
+ * 
+ * queries
+ * 
+ * localhost/api/login?name=ahmed
+
+ **/
